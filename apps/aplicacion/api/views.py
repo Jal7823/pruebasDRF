@@ -11,13 +11,13 @@ def cars_api_view(request):
     if request.method == 'GET':
         cars = Cars.objects.all()
         cars_serializer = CarsSerializer(cars,many=True)
-        return Response(cars_serializer.data)
+        return Response(cars_serializer.data,status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         serializer = CarsSerializer(data=request.data)
         if serializer.is_valid():
             car = serializer.save()
-            return Response(CarsSerializer(car).data)
+            return Response(CarsSerializer(car).data,status=status.HTTP_200_OK)
 
 @api_view(['GET','PUT','DELETE'])
 def car_api_view(request,pk):
