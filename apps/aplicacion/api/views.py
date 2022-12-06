@@ -9,7 +9,7 @@ from .serializer import CarsSerializer
 def cars_api_view(request):
 
     if request.method == 'GET':
-        cars = Cars.objects.all()
+        cars = Cars.objects.all().values('id','name','price')
         cars_serializer = CarsSerializer(cars,many=True)
         return Response(cars_serializer.data,status=status.HTTP_200_OK)
 
@@ -21,7 +21,7 @@ def cars_api_view(request):
 
 @api_view(['GET','PUT','DELETE'])
 def car_api_view(request,pk):
-    car = Cars.objects.filter(id=pk).first()
+    car = Cars.objects.filter(id=pk).values().first()
 
     if car:
 
@@ -39,6 +39,8 @@ def car_api_view(request,pk):
 
         if request.method == 'DELETE':
             car.delete()
-            return Response({'mssage':f'the resource {car.name} was deleted '},status=status.HTTP_204_NO_CONTENT)
+            return Response({'message':f'the resource {car.name} was deleted '},status=status.HTTP_204_NO_CONTENT)
     else:
         return Response({'message':'resource not found'},status=status.HTTP_404_NOT_FOUND)
+
+
